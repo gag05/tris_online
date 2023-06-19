@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Livello 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <style>
+      .b {
+        fill: none;
+        stroke: #ece0df;
+        stroke-miterlimit: 10;
+        stroke-width: 20px;
+      }
+    </style>
+  </defs>
+  <line class="b" x1="50" y1="250" x2="250" y2="50"/>
+  <line class="b" x1="250" y1="250" x2="50" y2="50"/>
+</svg>
