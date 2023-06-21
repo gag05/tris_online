@@ -23,18 +23,25 @@
         $row = $result_game->fetch_assoc();
         $player1_id = $row["player1_id"];
 
-        $sql_set_game = "INSERT INTO game (player1_id,player2_id) VALUES ($player1_id,$ID_ricevente)";
-        $result_set_game = mysqli_query($conn,$sql_set_game);
-        if(!$result_set_game)
-            echo "Error: " . $sql_set_game . "<br>" . mysqli_error($conn);
+        $sql_check_game_esistenti = "SELECT * FROM game WHERE player1_id = $player1_id AND player2_id = $ID_ricevente";
+        $result_check_game_esistenti = mysqli_query($conn,$sql_check_game_esistenti);
+        if(!$result_check_game_esistenti)
+            echo "err";
+        
+    }
 
         //print_r($player1_id." ".$ID_ricevente." aggiornata richiesta 1");
-    }
+    
 
     $sql1 = "UPDATE request SET stato_accettato=$stato_richiesta WHERE id_richiesta=$minimo";
     $result1 = mysqli_query($conn,$sql1); 
     if(!$result1)
         echo "Error: " . $sql1 . "<br>" . mysqli_error($conn);
+
+    $sql_aggiorna_stato = "UPDATE player SET avaible = 0 WHERE player_id = $ID_ricevente";
+    $result_aggiorna_stato = mysqli_query($conn,$sql_aggiorna_stato);
+    if(!$result_aggiorna_stato)
+        echo "err";
 
     
 ?>

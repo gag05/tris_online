@@ -47,7 +47,7 @@
         }
     }
     $time = time();
-    $time_valid = $time -(1*60);
+    $time_valid = $time -(30*60);
     //$sql_controllo_afk = "SELECT tempo FROM player WHERE tempo < $time_valid";
     $sql_controllo_afk = "DELETE FROM player WHERE tempo < $time_valid";
     $result_controllo_afk = mysqli_query($conn,$sql_controllo_afk);

@@ -6,13 +6,17 @@
     $ID_SESSIONE = session_id();
     $nome;
 
+    $sql_trova_gioc = "SELECT * FROM player WHERE session_id = '$ID_SESSIONE'";
+    $result_trova_gioc = mysqli_query($conn,$sql_trova_gioc);
+    if(!$result_trova_gioc)
+        echo "err";
+
+    if($result_trova_gioc->num_rows==0){
+        header("Location: http://localhost/tris/");
+        die();
+    }
     if(isset($_POST['nome-player'])){
         $sql = "UPDATE player SET player_name='".$_POST['nome-player']."' WHERE session_id = '$ID_SESSIONE'"; 
-        $result = mysqli_query($conn, $sql);
-        if (!$result) {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-        }
-        $sql = "UPDATE player SET avaible='1' WHERE session_id = '$ID_SESSIONE'"; 
         $result = mysqli_query($conn, $sql);
         if (!$result) {
             echo "Error: " . $sql . "<br>" . mysqli_error($conn);
@@ -32,6 +36,11 @@
     else
         $nome = "Pinco pallo";
 
+    $sql = "UPDATE player SET avaible='1' WHERE session_id = '$ID_SESSIONE'"; 
+    $result = mysqli_query($conn, $sql);
+    if (!$result) {
+        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+    }
 
 ?>
 

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg class="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900">
+  <defs>
+    <style>
+      .q, .r, .s, .t {
+        fill: none;
+      }
+
+      .r {
+        stroke-width: 26px;
+        stroke: #00b400;
+      }
+
+      .s {
+        stroke: #1d1d1b;
+      }
+
+      .r, .s, .t {
+        stroke-miterlimit: 10;
+      }
+
+      .s {
+        stroke-width: 10px;
+      }
+
+      .t,.t2 {
+        stroke: #211b1b;
+        stroke-width: 20px;
+      }
+
+
+      .animato .anim-line{
+        stroke-dasharray: 900 900;
+   
+      }
+
+      .anim-line{
+        stroke-dasharray: 0 900;
+        transition-property: stroke-dasharray;
+        transition-duration: 1.05s;
+      }
+      
+      .anim-line#o-2,.anim-line#v-2{
+        transition-delay: .15s;
+      }
+
+      .anim-x line{
+        stroke-dasharray: 0 283;
+        transition-property: stroke-dasharray;
+        transition-duration: .3s;
+      }
+
+      .animato .anim-x line{
+        stroke-dasharray: 283 283;
+      }
+
+      .anim-o circle{
+        stroke-dasharray: 0 745;
+        transition-property: stroke-dasharray;
+        transition-duration: .4s;
+      }
+
+      .animato .anim-o circle{
+        stroke-dasharray: 745 745;
+      }
+
+      /*tempi*/
+      .anim-x.x11 .t{
+        transition-delay: 1.20s
+      }
+
+      .anim-x.x11 .t2{
+        transition-delay: 1.35s
+      }
+
+      .anim-o.o13 circle{
+        transition-delay: 1.5s;
+      }
+
+      .anim-x.x22 .t{
+        transition-delay: 1.85s
+      }
+
+      .anim-x.x22 .t2{
+        transition-delay: 2s
+      }
+
+      .anim-o.o33 circle{
+        transition-delay: 2.15s;
+      }
+
+      .anim-x.x23 .t{
+        transition-delay: 2.45s
+      }
+
+      .anim-x.x23 .t2{
+        transition-delay: 2.6s
+      }
+
+      .anim-o.o21 circle{
+        transition-delay: 2.75s;
+      }
+
+      .anim-x.x12 .t{
+        transition-delay: 3.05s
+      }
+
+      .anim-x.x12 .t2{
+        transition-delay: 3.20s
+      }
+
+      .anim-o.o31 circle{
+        transition-delay: 3.35s;
+      }
+
+      .anim-x.x32 .t{
+        transition-delay: 3.65s
+      }
+
+      .anim-x.x32 .t2{
+        transition-delay: 3.8s
+      }
+
+      .win rect{
+        fill:transparent;
+        transition-property: all;
+        transition-duration: 0.2s;
+        transition-delay: 3.95s;
+      }
+
+      .animato .win rect{
+        fill:green;
+      }
+
+      .dark line,.dark circle{
+        stroke: white;
+      }
+    </style>
+  </defs>
+  <g id="g" data-name="marker">
+    <g id="h" class="anim-o o33" data-name="o-b-r">
+      <circle class="t" cx="750" cy="750" r="100"/>
+      <rect class="q" x="600" y="600" width="300" height="300"/>
+    </g>
+    <g id="i" class="anim-x x32 win" data-name="x-b-c">
+      <rect class="q" x="300" y="600" width="300" height="300"/>
+      <line class="t" x1="350" y1="850" x2="550" y2="650"/>
+      <line class="t2" x1="550" y1="850" x2="350" y2="650"/>
+    </g>
+    <g id="j" class="anim-o o31" data-name="o-b-l">
+      <circle class="t" cx="150" cy="750" r="100"/>
+      <rect class="q" y="600" width="300" height="300"/>
+    </g>
+    <g id="k" class="anim-x x23" data-name="x-c-r">
+      <line class="t" x1="650" y1="550" x2="850" y2="350"/>
+      <line class="t2" x1="850" y1="550" x2="650" y2="350"/>
+      <rect class="q" x="600" y="300" width="300" height="300"/>
+    </g>
+    <g id="l" class="anim-x x22 win" data-name="x-c-c">
+      <rect class="q" x="300" y="300" width="300" height="300"/>
+      <line class="t" x1="350" y1="550" x2="550" y2="350"/>
+      <line class="t2" x1="550" y1="550" x2="350" y2="350"/>
+    </g>
+    <g id="m" class="anim-o o21" data-name="o-c-l">
+      <circle class="t" cx="150" cy="450" r="100"/>
+      <rect class="q" x="0" y="300" width="300" height="300"/>
+    </g>
+    <g id="n" class="anim-o o13" data-name="o-t-r">
+      <circle class="t" cx="750" cy="150" r="100"/>
+      <rect class="q" x="600" y="0" width="300" height="300"/>
+    </g>
+    <g id="o" class="anim-x x12 win" data-name="x-t-c">
+      <rect class="q" x="300" y="0" width="300" height="300"/>
+      <line class="t" x1="350" y1="250" x2="550" y2="50"/>
+      <line class="t2" x1="550" y1="250" x2="350" y2="50"/>
+    </g>
+    <g id="p" class="anim-x x11" data-name="x-t-l">
+      <line class="t" x1="50" y1="250" x2="250" y2="50"/>
+      <line class="t2" x1="250" y1="250" x2="50" y2="50"/>
+      <rect class="q" x="0" width="300" height="300"/>
+    </g>
+  </g>
+
+    <g id="lines" class="" data-name="lines">
+      <line id="o-2" data-name="o-2" class="s anim-line" x2="0" y1="600" x1="900" y2="600"/>
+      <line id="o-1" data-name="o-1" class="s anim-line" x1="0" y1="300" x2="900" y2="300"/>
+      <line id="v-2" data-name="v-2" class="s anim-line" x1="600" x2="600" y1="900"/>
+      <line id="v-1" data-name="v-1" class="s anim-line" x1="300" x2="300" y2="900"/>
+      <!--<line id="win" data-name="win" class="r" x1="453" y1="50" x2="453" y2="850"/>-->
+    </g>
+</svg>

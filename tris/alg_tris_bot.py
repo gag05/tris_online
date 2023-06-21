@@ -1,4 +1,6 @@
 import numpy as np
+import json
+import sys
 
 def controllo_vincita(turno,p,row,col,diag):
     vinc = False
@@ -93,7 +95,7 @@ def minimax(situazione,row,col,diag,turn,depth,role):
                         mossa = [row_f,col_f]
         return min,mossa
 
-
+'''
 row = np.array([1,-1,1])
 col = np.array([0,0,1])
 diag = np.array([-1,0])
@@ -106,3 +108,49 @@ situazione  = np.array(
 ris = valuta_posizione(situazione)
 
 print(minimax(situazione,row,col,diag,8,8,False))
+
+'''
+
+info = json.loads(sys.argv[1])
+
+#info  = '{"row":["1","0","0"],"col":["1","0","0"],"diag":["1","0"]}'
+
+#info_l = json.loads(info)
+
+row = np.array([0,0,0])
+col = np.array([0,0,0])
+diag = np.array([0,0])
+
+situazione  = np.array( 
+                        [[0,0,0],
+                        [0,0,0],
+                        [0,0,0]]
+                    )
+
+turno = int(info["turn"])
+
+for ind,i in enumerate(info["row"]):
+    row[ind] = int(i)
+
+for ind,i in enumerate(info["col"]):
+    col[ind] = int(i)
+
+for ind,i in enumerate(info["diag"]):
+    diag[ind] = int(i)
+
+for ind,i in enumerate(info["sit"]):
+    for ind2,j in enumerate(i):
+        situazione[ind][ind2] = int(j)
+
+rit = "argomenti passati: "
+rit = minimax(situazione,row,col,diag,turno,8,False)
+
+mossa = rit[1]
+json_rit = {
+        "row":str(mossa[0]),
+        "col":str(mossa[1])
+    }
+
+print(json.dumps(json_rit))
+
+

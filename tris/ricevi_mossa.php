@@ -30,6 +30,11 @@
         $row_cord = $result_cord->fetch_assoc(); 
 
         ret($row["mittente"],$row_cord["modify_row"],$row_cord["modify_col"]);
+
+        $sql_reset_to_default = "UPDATE game SET modify_col = 0, modify_row = 0 WHERE game_id = $game_id";
+        $result_reset_to_default = mysqli_query($conn,$sql_reset_to_default);
+        if(!$result_reset_to_default)
+            echo "err";
     }else
         ret($giocatore,1,1);
 

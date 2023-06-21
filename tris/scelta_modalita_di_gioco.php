@@ -87,6 +87,12 @@
                 <div class="title-card">
                     <h1>Gioca contro il computer</h1>
                 </div>
+                <div class="descrizione">
+                    <p>Gioca contro il computer per allenarti e migliorare</p>
+                </div>
+                <div class="bottoni">
+                    <button class="btn" id="btn-bot">Gioca</button>
+                </div>
             </div> 
         </div>
     </body>
@@ -264,6 +270,10 @@
 
             $("#mod-local").on("click",function(){
                 window.location.href = "tris.php";
+            });
+
+            $("#btn-bot").on("click",function(){
+                window.location.href = "tris_bot.php";
             });
         });
     </script>        

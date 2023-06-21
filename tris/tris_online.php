@@ -1,18 +1,14 @@
 <?php 
    session_start();
-   echo session_id();
+   $ID_SESSIONE =  session_id();
    include "connection.php";
    $ID_GIOCATORE = $_SESSION["log"];
 
    print_r("<br> sessione:".$_SESSION["situation"]."<br>");
 
-   //print_r($_SESSION["situation"]);
-   if(!isset($_SESSION["situation"]))
-      $_SESSION["situation"] = array(0,0,0,0,0,0,0,0,0);
-
    //echo "ciao";
 
-   $sql_id = "SELECT * FROM game WHERE player1_id=$ID_GIOCATORE OR player2_id = $ID_GIOCATORE";
+   $sql_id = "SELECT * FROM game WHERE game_id = (SELECT MAX(game_id) FROM game WHERE player1_id=$ID_GIOCATORE OR player2_id = $ID_GIOCATORE)";
    $result_id = mysqli_query($conn,$sql_id);
    if(!$result_id)
       echo "ERRORE:connessione";
@@ -43,6 +39,23 @@
    
    /*echo "<br>player1_name: ".$NAME_PLAYER."<br>";
    echo "player2_name: ".$NAME_PLAYER2;*/
+
+   $situazione = array(0,0,0,0,0,0,0,0,0);
+   $cell_name;
+   for($i = 1;$i<=9;$i++){
+      $cell_name = "cell".$i;
+      $sql_rec_sit = "SELECT `$cell_name` FROM game WHERE game_id = $ID_PARTITA";
+      $result_rec_sit = mysqli_query($conn,$sql_rec_sit);
+      if(!$result_rec_sit)
+         echo "err";
+      $row_rec_sit = $result_rec_sit->fetch_assoc();
+      $situazione[$i-1] = $row_rec_sit[$cell_name]; 
+   }
+   /*echo "<br>";
+   for($i = 0;$i<9;$i++)
+      echo "sit[i]: ".$situazione[$i]."<br>";*/
+
+   echo "<br>".$ID_PARTITA."<br>";
 ?>
 
 <html>
@@ -62,6 +75,9 @@
             <h2 class="display-none" id="par">Pareggio</h2>
             <div class="row">
                <div class="col" style="padding-bottom: 10px; text-align:center; margin-top:30px;">
+                  <div class="richiesta-rifiutata display-none">
+                     <p>La tua richiesta è stata rifiutata</p>
+                  </div>
                   <button class="btn reset">Rivincita</button>
                   <button class="btn menu">Torna al menù</button>
                </div>
@@ -112,7 +128,7 @@
       </div>
 
    </body>
-
+   
    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
    <script>
       $( document ).ready(function() {
@@ -131,26 +147,37 @@
          ris = 0;
          giocatore_bool =  <?php echo $GIOCATORE; ?>;
          if(giocatore_bool == 1)
-            ricevi_mossa = setInterval(receive_move,800);     
+            ricevi_mossa = setInterval(receive_move,800);    
 
-         arr = <?= json_encode($_SESSION["situation"])?>;
-         console.log(arr);
-         for(i=0;i<9;i++){
-            console.log(<?= $i ?>);
-            pos = i;
-            row = parseInt(pos/3)+1;
-            col = pos%3+1;
-            val = arr[i];
-            console.log("pos: "+pos+" row: "+row+" col: "+col+" val: "+val);
-            if(val == 1){
-               console.log("croce inserita");
-               click_cella(row,col,2);
-            }else if(val != 0){
-               console.log("cerchio inserito");
-               click_cella(row,col,2);
+         function aggiorna_tempo(){
+            $.ajax({
+                  type: "post",
+                  url: "afk.php",
+                  data: jQuery.parseJSON('{"ID":  "<?= $ID_SESSIONE?>"}'), 
+                  suscces:function(){
+                     
+                  }
+            });
+        }
+
+         function rec_prev(){
+            row_l = 0;
+            col_l = 0;
+
+            prev = <?= json_encode($situazione) ?>;
+            console.log(prev);
+            for(i=0;i<9;i++){
+               //console.log("prev: "+prev[i]+"\n");
+               if(prev[i] != 0){
+                  row_l = parseInt(i/3)+1;
+                  col_l = i%3+1;
+
+                  click_cella(row_l,col_l,1);
+               }
             }
-         }
 
+         }
+         rec_prev();
 
          function richiesta(){   
             $.ajax({
@@ -239,23 +266,9 @@
             //p1 = true (x), p2 = false (o) 
             val_agg = giocatore? 1:-1;
 
-            json = jQuery.parseJSON('{"row": '+row+', "col": '+col+', "val": '+val_agg+'}');
-
-            if(b != 2)
-               $.ajax({
-                  type: "post",
-                  url: "aggiorna_situazione.php",
-                  data: json,
-                  success:function(data){
-                     console.log(data+"\n");
-                  }
-               });
-
-            //$_SESSION["situation"][((row-1)*3)+col] = val_agg;
-
             aggirona_array(row,col,val_agg);
 
-            if(b != 1 && b != 2){
+            if(b != 1){
                json = jQuery.parseJSON('{"row": '+row+',"col": '+col+',"player": '+<?php echo $GIOCATORE;?>+',"game_id": '+<?php echo $ID_PARTITA;?>+'}');
                console.log("mando mosse");
                return $.ajax({
@@ -281,8 +294,9 @@
                      console.log($ris);
                      if($ris.stato == 1){
                         $("#nome-pl2").text($ris.nome);
-                        $(".timer").addClass("d-none");
-                        $(".rifiuto-richiesta").removeClass("d-none");
+                        $(".invio-rivincita").addClass("display-none");
+                        $(".col").removeClass("display-none");
+                        $(".richiesta-rifiutata").removeClass("display-none");
                      }else if($ris.stato == 0){
                         <?php 
                            $sql = "UPDATE game SET n_giocatori = 2 WHERE game_id = $ID_PARTITA";
@@ -356,15 +370,11 @@
                      }
                   });
                }
-               setInterval(richiesta,800);
-               <?php $_SESSION["situation"] = array(0,0,0,0,0,0,0,0,0); ?>
+               rich = setInterval(richiesta,800);
             }
          }
 
          function aggiorna_richiesta(status){
-                $(".overlay").addClass("d-none");
-                $(".richiesta-ricevuta").addClass("d-none");
-                
                 info_pl.accettato = status;
 
 
@@ -400,19 +410,8 @@
          }
 
          function reset(){
-            $(".grid-item").each(function(index){
-               $(this).removeClass("green x o checked")
-            });
-
-            $(".p-turn").text(""+'<?php echo $NAME_PLAYER; ?>');
-            turno = 0;
-
-            $(".overlay").addClass("display-none");
-            $(".pop-up h2").addClass("display-none");
-            val_p = true;
-            a_r = [0,0,0];
-            a_c = [0,0,0];
-            a_d = [0,0]; 
+            console.log("eseguito res");
+            window.location.href = "tris_online.php";
          }
 
          function cancella_stanza(){
@@ -442,14 +441,14 @@
          $('#checkbox1').change(function() { 
             $("body").toggleClass("dark");
          });
-
+         at_risp = "";
          $(".btn.reset").on("click",function(){
 
             $(".overlay h2").addClass("display-none");
             $(".col").addClass("display-none");
             $(".invio-rivincita").removeClass("display-none");
 
-            json = jQuery.parseJSON('{"pl2":2,"game_id":'+<?php echo $ID_PARTITA;?>+'}');
+            json = jQuery.parseJSON('{"pl2": 2,"game_id":'+<?= $ID_PARTITA?>+', "id": '+<?=$ID_GIOCATORE?>+'}');
 
             $.ajax({
                type: "post",
@@ -459,7 +458,7 @@
                   console.log("rimandata la richiesta");
                }
             });
-            setInterval(attesa_risposta, 800);
+            at_risp = setInterval(attesa_risposta, 800);
          });
 
          $(".btn.menu").on("click",function(){
@@ -468,29 +467,25 @@
          });
 
          $("#btn-accetta-richiesta").on("click",function(){
+            clearInterval(rich);
+            clearInterval(at_risp);
+            ricevi_mossa = setInterval(receive_move,800);
+            $.when(cancella_stanza()).done(function(){});
             $.when(aggiorna_richiesta(1)).done();
             reset();
          });
 
-         $("#btn-rifiuta-richiesta").on("click",function(){
+         $("#btn-declina-richiesta").on("click",function(){
             $.when(aggiorna_richiesta(-1)).done();
-            window.location.href = "scelta_modalita_di_gioco.php";
+            $("richiesta-ricevuta").addClass("display-none");
+            $(".col").removeClass("display-none");
+
          });
 
-        $(window).bind('beforeunload',function(){
-            cancella_stanza();
-            return 'saiaodoiasido';
+         $(document).on("click",function(){
+            aggiorna_tempo();
          });
 
-         $(window).on("unload",function(){
-            
-            return 'saiaodoiasido';
-         });
-         /*window.onbeforeunload= function(e){
-            var s = "s";
-            e.returnValue= s;
-            return "ciaoooo";
-         }*/
       });
 
    </script>

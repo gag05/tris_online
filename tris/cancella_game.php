@@ -13,16 +13,9 @@
    
     //print_r($row_controllo_nGiocatori["n_giocatori"]);
 
-    if($row_controllo_nGiocatori["n_giocatori"] <= 1){
-        $sql = "DELETE FROM game WHERE game_id = $game_id";
-        $result = mysqli_query($conn,$sql);
-        if(!$result)
-            echo "err";
-    }else{
-        $sql_aggiorno_nGiocatori = "UPDATE game SET n_giocatori = 1 WHERE game_id = $game_id";
-        $result_aggiorno_nGiocatori = mysqli_query($conn,$sql_aggiorno_nGiocatori);
-        if(!$result_aggiorno_nGiocatori)
-            echo "err";
-    }
+    $sql = "DELETE FROM game WHERE game_id = $game_id";
+    $result = mysqli_query($conn,$sql);
+    if(!$result)
+        echo "err";
 
 ?>

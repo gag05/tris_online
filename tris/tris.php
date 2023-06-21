@@ -1,3 +1,14 @@
+<?php
+   session_start();
+   include "connection.php";
+
+   $sql_aggiorna_avaible = "UPDATE player SET avaible = 0 WHERE player_id = ".$_SESSION["log"];
+   //echo $sql_aggiorna_avaible;
+   $result_aggiorna_avaible = mysqli_query($conn,$sql_aggiorna_avaible);
+   if(!$result_aggiorna_avaible)
+      echo "err";
+?>
+
 <html>
    <head>
 

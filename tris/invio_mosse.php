@@ -39,6 +39,18 @@
     if(!$sql_update_turno)
         echo "OH MIO DIO ERRORE";
         
-    echo $gioc;
+    echo $gioc."\n";
+    
+    $cell_number = (($row_index-1)*3+$col_index);
+    $cell_name = "cell".$cell_number;
+    $val = $gioc == 0? 1:-1;
+
+    echo $cell_name."\n";
+
+    $sql_update_cell = "UPDATE game SET `$cell_name` = $val WHERE game_id = $game_id";
+    $result_update_cell = mysqli_query($conn,$sql_update_cell);
+    if(!$result_update_cell)
+        echo "err";
+
     
 ?>
